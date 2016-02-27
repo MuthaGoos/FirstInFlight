@@ -1,0 +1,15 @@
+#Makefile for building motors
+
+default:
+	@echo "Unimplemented"
+
+
+
+
+all: default
+
+
+clean:
+	@echo "Unimplemented"
+
+

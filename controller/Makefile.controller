@@ -1,0 +1,27 @@
+#Makefile for flight controller
+THIS_DIR = $(CONTROLLER_DIR)
+
+#Headers
+HEADER = $(HEADERS)
+HEADER += $(THIS_DIR)/controller.h
+
+#Objects
+OBJECTS = $(THIS_DIR)/controller.o
+
+#Source
+SOURCES = $(THIS_DIR)/controller.c
+
+#Rules
+default: $(OBJECTS)
+	$(LD) $(OBJECTS) -o $(OUT_DIR)/$(NAME)
+
+$(OBJECTS): $(SOURCES) $(HEADERS)
+	$(CC) $(FLAGS) -I$(H_DIR) $< -o $@
+
+
+all: default
+
+
+clean:
+	rm $(OBJECTS) 
+

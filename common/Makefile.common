@@ -1,0 +1,14 @@
+#Makefile for building common code
+
+default:
+	@echo "Unimplemented"
+
+
+
+
+all: default
+
+
+clean:
+	@echo "Unimplemented"
+
