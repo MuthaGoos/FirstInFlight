@@ -1,76 +1,46 @@
 #This is the top level makefile that will build the entire project space
 
 #Name
-NAME = flight
+EXE = flight
 
-
-#compiler
-CC = /usr/bin/gcc -c
-LD = /usr/bin/gcc -o
+ROOT = $(shell pwd)
 
 #FLAGS
-FLAGS =-Wall
-
+CFLAGS =-Wall
 
 #DIRECTORIES
-ROOT = /home/flight/Desktop/repositories/FirstInFlight
-COMMS_DIR = $(ROOT)/comms
-COMMON_DIR = $(ROOT)/common
-CONTROLLER_DIR = $(ROOT)/controller
-GYRO_DIR = $(ROOT)/gyro
-H_DIR = $(ROOT)/includes
-MOTORS_DIR = $(ROOT)/motors
-OUT_DIR = $(ROOT)
+HEADER_DIR = "$(ROOT)/includes"
+BUILD_DIR = "$(ROOT)/build"
 
-#HEADERS
-HEADERS = 
-HEADERS += $(H_DIR)/debug.h
+#compiler
+CC = /usr/bin/gcc -c -I $(HEADER_DIR)
+LD = /usr/bin/gcc -o 
 
 #LIBS
 LIBS =-lpthread
 
 
-export NAME
-
-#compiler
-export CC LD
-
-#headers
-export HEADERS
-
-#directories
-export H_DIR COMMON_DIR COMMS_DIR CONTROLLER_DIR GYRO_DIR MOTORS_DIR OUT_DIR
-
-#flags
-export FLAGS
+export  CC         \
+	LD         \
+	CFLAGS     \
+	BUILD_DIR 
 
 default:
-	@echo "Building Communications"
-	@make --no-print-directory -f $(COMMS_DIR)/Makefile.comms
+	-mkdir -p $(BUILD_DIR)
 	@echo "Building Common"
-	@make --no-print-directory -f $(COMMON_DIR)/Makefile.common
+	@make -C common
+	@echo "Building Hardware Interfaces"
+	@make -C hardware
 	@echo "Building Controller"
-	@make --no-print-directory -f $(CONTROLLER_DIR)/Makefile.controller
-	@echo "Building Gyro"
-	@make --no-print-directory -f $(GYRO_DIR)/Makefile.gyro
-	@echo "Building Motors"
-	@make --no-print-directory -f $(MOTORS_DIR)/Makefile.motors
+	@make -C controller
+	@echo "Building Communications"
+	@make -C comms
+	@echo "Building Simulation"
+	@make -C simulation
+	gcc -o flight build/*.o
 
-
-all: default
-
+all: default 
 
 clean:
-	@echo "Cleaning Communications"
-	@make --no-print-directory -f $(COMMS_DIR)/Makefile.comms clean
-	@echo "Cleaning Common"
-	@make --no-print-directory -f $(COMMON_DIR)/Makefile.common clean
-	@echo "Cleaning Controller"
-	@make --no-print-directory -f $(CONTROLLER_DIR)/Makefile.controller clean
-	@echo "Cleaning Gyro"
-	@make --no-print-directory -f $(GYRO_DIR)/Makefile.gyro clean
-	@echo "Cleaning Motors"
-	@make --no-print-directory -f $(MOTORS_DIR)/Makefile.motors clean
-	rm $(OUT_DIR)/$(NAME)
-
-
+	rm -rf $(BUILD_DIR)
+	rm -rf $(EXE)
